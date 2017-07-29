@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[Hadoop ObjectWritable 源码与相关单元测试分析]]></title>
+    <url>%2F2017%2F07%2F29%2FHadoop-ObjectWritable-class-analysis%2F</url>
+    <content type="text"><![CDATA[1234567891011121314151617181920212223242526272829303132@Testpublic void testMany() throws IOException &#123; //Write a big set of data, one of each primitive type array for (Object x : bigSet) &#123; //write each test object two ways //First, transparently via ObjectWritable ObjectWritable.writeObject(out, x, x.getClass(), null, true); //Second, explicitly via ArrayPrimitiveWritable (new ArrayPrimitiveWritable(x)).write(out); &#125; //Now read the data back in in.reset(out.getData(), out.getLength()); for (int x = 0; x &lt; resultSet.length; ) &#123; //First, transparently resultSet[x++] = ObjectWritable.readObject(in, null); //Second, explicitly ArrayPrimitiveWritable apw = new ArrayPrimitiveWritable(); apw.readFields(in); resultSet[x++] = apw.get(); &#125; //validate data structures and values assertEquals(expectedResultSet.length, resultSet.length); for (int x = 0; x &lt; resultSet.length; x++) &#123; assertEquals("ComponentType of array " + x, expectedResultSet[x].getClass().getComponentType(), resultSet[x].getClass().getComponentType()); &#125; assertTrue("In and Out arrays didn't match values", Arrays.deepEquals(expectedResultSet, resultSet));&#125; 大标题]]></content>
+      <categories>
+        <category>Java</category>
+        <category>Hadoop</category>
+      </categories>
+      <tags>
+        <tag>Hadoop</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+</search>
