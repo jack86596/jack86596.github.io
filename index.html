@@ -387,7 +387,7 @@
           
             <span class="post-letters-count">
             &nbsp; | &nbsp;
-            <span>2,799 words</span>
+            <span>2,798 words</span>
             &nbsp; | &nbsp;
             <span>13 mins</span>
           
@@ -620,7 +620,7 @@
 </tr>
 </tbody>
 </table>
-<p>将这个182个字节传递给DataInput对象，然后分别用<code>ObjectWritable.readObject</code>和<code>ArrayPrimitiveWritable</code>处理，可以准确的将2个字符串的的2遍都读取出来，最后放进resultSet中，将resultSet和expectedResultSet对比，可以发现最终结果和期望的结果一致，表明解析数组成功了。</p>
+<p>将这个182个字节传递给DataInput对象，然后分别用<code>ObjectWritable.readObject</code>和<code>ArrayPrimitiveWritable</code>处理，可以准确的将2个字符串的2遍都读取出来，最后放进resultSet中，将resultSet和expectedResultSet对比，可以发现最终结果和期望的结果一致，表明解析数组成功了。</p>
 <p>从这182字节的内容，我们可以看出<code>ObjectWritable.readObject</code>比<code>ArrayPrimitiveWritable</code>只是多了传递给<code>ObjectWritable.readObject</code>的declaredClass字符串的长度，其他都是一样的，调用<code>ObjectWritable.readObject</code>会隐式调用<code>ArrayPrimitiveWritable</code>的write方法。</p>
 <p>这个测试用例只测试了<code>ObjectWritable.readObject</code>处理元素为基本类型的数组，并没有测试处理<code>Writeable</code>类型的对象。对于<code>Writeable</code>对象，其本身已经包含了序列化的函数<code>write</code>和<code>readFields</code>，并不需要借助<code>ObjectWritable</code>来实现序列化，但<code>ObjectWritable</code>可以处理任何类的序列化需求，当然也不排除处理<code>Writeable</code>及它衍生类。</p>
 
