@@ -298,6 +298,165 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/25/hadoop-sequencefile-class-analysis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Yahui Liu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="LaoLiu&Company">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/25/hadoop-sequencefile-class-analysis/" itemprop="url">Hadoop SequenceFile I/O 流分析</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-25T20:58:04+08:00">
+                2017-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/hadoop/" itemprop="url" rel="index">
+                    <span itemprop="name">Hadoop</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+          
+            <span class="post-letters-count">
+            &nbsp; | &nbsp;
+            <span>407 words</span>
+            &nbsp; | &nbsp;
+            <span>2 mins</span>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>由于SequenceFile中各种Stream相互嵌套，初学者很难理清各个Stream之间的关系，本文将直接展示Writer和Reader构造并且初始化完成后，最终构成层层类Stream字段的实际对象。本文将以RecordCompressWriter为例。</p>
+<h1 id="1-Writer类"><a href="#1-Writer类" class="headerlink" title="1 Writer类"></a>1 Writer类</h1><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DataOutputBuffer</span> <span class="keyword">extends</span> <span class="title">DataOutputStream</span> </span>&#123;</div><div class="line">  	<span class="class"><span class="keyword">class</span> <span class="title">Buffer</span> <span class="keyword">extends</span> <span class="title">ByteArrayOutputStream</span> </span>&#123;</div><div class="line">        Buffer() &#123;</div><div class="line">            ByteArrayOutputStream() &#123;</div><div class="line">                ByteArrayOutputStream(<span class="number">32</span>) extends OutputStream &#123;</div><div class="line">                    <span class="keyword">protected</span> <span class="keyword">byte</span> buf[] = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">32</span>];</div><div class="line">                &#125;;</div><div class="line">            &#125;;</div><div class="line">        &#125;;</div><div class="line">	&#125;</div><div class="line">    DataOutputBuffer() &#123;</div><div class="line">      	Buffer buffer = <span class="keyword">new</span> Buffer();</div><div class="line">        DataOutputBuffer(buffer) &#123;</div><div class="line">            DataOutputStream(buffer) extends FilterOutputStream &#123;</div><div class="line">                FilterOutputStream(buffer) extends OutputStream &#123;</div><div class="line">                    <span class="keyword">protected</span> OutputStream out = buffer;</div><div class="line">                &#125;;</div><div class="line">            &#125;;</div><div class="line">          	<span class="keyword">private</span> Buffer buffer = buffer;</div><div class="line">        &#125;;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">FSDataOutputStream</span> <span class="keyword">extends</span> <span class="title">DataOutputStream</span> </span>&#123;</div><div class="line">    LocalFSFileOutputStream localFSFileOutputStream = <span class="keyword">new</span> LocalFSFileOutputStream(..) extends OutputStream &#123;</div><div class="line">        <span class="keyword">private</span> FileOutputStream fos = <span class="keyword">new</span> FileOutputStream(..) extends OutputStream &#123;</div><div class="line">        &#125;;</div><div class="line">    &#125;;</div><div class="line">	BufferedOutputStream bufferedOutputStream = <span class="keyword">new</span> BufferedOutputStream(localFSFileOutputStream, ..) extends FilterOutputStream &#123;</div><div class="line">        FilterOutputStream(localFSFileOutputStream) extends OutputStream &#123;</div><div class="line">            <span class="keyword">protected</span> OutputStream out = localFSFileOutputStream;</div><div class="line">        &#125;;</div><div class="line">      	<span class="keyword">protected</span> <span class="keyword">byte</span> buf[] = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4096</span>];</div><div class="line">    &#125;;</div><div class="line">	FSDataOutputStream(bufferedOutputStream, ..) &#123;</div><div class="line">        PositionCache positionCache = <span class="keyword">new</span> PositionCache(bufferedOutputStream, ..) extends FilterOutputStream &#123;</div><div class="line">            FilterOutputStream(bufferedOutputStream) &#123;</div><div class="line">                <span class="keyword">protected</span> OutputStream out = bufferedOutputStream;</div><div class="line">            &#125;;</div><div class="line">        &#125;;</div><div class="line">      	DataOutputStream(positionCache) extends FilterOutputStream &#123;</div><div class="line">            FilterOutputStream(positionCache) &#123;</div><div class="line">                <span class="keyword">protected</span> OutputStream out = positionCache;</div><div class="line">            &#125;;</div><div class="line">        &#125;;</div><div class="line">      	<span class="keyword">private</span> <span class="keyword">final</span> OutputStream wrappedStream = bufferedOutputStream;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">JavaSerialization</span> </span>&#123;</div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">JavaSerializationSerializer</span> </span>&#123;</div><div class="line">        open(buffer) &#123; <span class="comment">// DataOutputBuffer</span></div><div class="line">            ObjectOutputStream objectOutputStream = <span class="keyword">new</span> ObjectOutputStream(buffer) extends OutputStream &#123;</div><div class="line">    			BlockDataOutputStream blockDataOutputStream = <span class="keyword">new</span> BlockDataOutputStream(buffer) extends OutputStream &#123;</div><div class="line">                    <span class="keyword">private</span> <span class="keyword">final</span> OutputStream out = buffer;</div><div class="line">                  	DataOutputStream dataOutputStream = <span class="keyword">new</span> DataOutputStream(blockDataOutputStream) extends FilterOutputStream &#123;</div><div class="line">                        FilterOutputStream(blockDataOutputStream) extends OutputStream &#123;</div><div class="line">                            <span class="keyword">protected</span> OutputStream out = blockDataOutputStream;</div><div class="line">                        &#125;;</div><div class="line">                    &#125;;</div><div class="line">                  	<span class="keyword">private</span> <span class="keyword">final</span> DataOutputStream dout = dataOutputStream;</div><div class="line">                &#125;;</div><div class="line">            	<span class="keyword">private</span> <span class="keyword">final</span> BlockDataOutputStream bout = blockDataOutputStream;</div><div class="line">            &#125;;</div><div class="line">          	<span class="keyword">private</span> ObjectOutputStream oos = objectOutputStream;</div><div class="line">        &#125;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DefaultCodec</span> </span>&#123;</div><div class="line">    <span class="function">CompressionOutputStream <span class="title">createOutputStream</span><span class="params">(buffer, compressor)</span> </span>&#123; <span class="comment">//DataOutputBuffer, BuiltInZlibDeflater</span></div><div class="line">        CompressorStream(buffer, compressor) extends CompressionOutputStream &#123;</div><div class="line">            CompressionOutputStream(buffer) extends OutputStream &#123;</div><div class="line">                <span class="keyword">protected</span> <span class="keyword">final</span> OutputStream out = buffer;</div><div class="line">            &#125;;</div><div class="line">          	<span class="keyword">protected</span> Compressor compressor = compressor;</div><div class="line">          	<span class="keyword">protected</span> <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4096</span>];</div><div class="line">        &#125;;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DataOutputStream</span> <span class="keyword">extends</span> <span class="title">FilterOutputStream</span> </span>&#123;</div><div class="line">	BufferedOutputStream bufferedOutputStream = BufferedOutputStream(deflateFilter) &#123; <span class="comment">// CompressorStream</span></div><div class="line">    	BufferedOutputStream(deflateFilter, ..) extends FilterOutputStream &#123;</div><div class="line">        	FilterOutputStream(deflateFilter) extends OutputStream &#123;</div><div class="line">                <span class="keyword">protected</span> OutputStream out = deflateFilter;</div><div class="line">            &#125;;</div><div class="line">          	<span class="keyword">protected</span> <span class="keyword">byte</span> buf[] = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">8192</span>];</div><div class="line">        &#125;;</div><div class="line">    &#125;;</div><div class="line">  	DataOutputStream(bufferedOutputStream) &#123;</div><div class="line">        FilterOutputStream(bufferedOutputStream) extends OutputStream &#123;</div><div class="line">            <span class="keyword">protected</span> OutputStream out = bufferedOutputStream;</div><div class="line">        &#125;;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">JavaSerialization</span> </span>&#123;</div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">JavaSerializationSerializer</span> </span>&#123;</div><div class="line">        open(deflateOut) &#123; <span class="comment">// DataOutputStream</span></div><div class="line">            ObjectOutputStream objectOutputStream = <span class="keyword">new</span> ObjectOutputStream(deflateOut) extends OutputStream &#123;</div><div class="line">    			BlockDataOutputStream blockDataOutputStream = <span class="keyword">new</span> BlockDataOutputStream(deflateOut) extends OutputStream &#123;</div><div class="line">                    <span class="keyword">private</span> <span class="keyword">final</span> OutputStream out = deflateOut;</div><div class="line">                  	DataOutputStream dataOutputStream = <span class="keyword">new</span> DataOutputStream(blockDataOutputStream) extends FilterOutputStream &#123;</div><div class="line">                        FilterOutputStream(blockDataOutputStream) extends OutputStream &#123;</div><div class="line">                            <span class="keyword">protected</span> OutputStream out = blockDataOutputStream;</div><div class="line">                        &#125;;</div><div class="line">                    &#125;;</div><div class="line">                  	<span class="keyword">private</span> <span class="keyword">final</span> DataOutputStream dout = dataOutputStream;</div><div class="line">                &#125;;</div><div class="line">            	<span class="keyword">private</span> <span class="keyword">final</span> BlockDataOutputStream bout = blockDataOutputStream;</div><div class="line">            &#125;;</div><div class="line">          	<span class="keyword">private</span> ObjectOutputStream oos = objectOutputStream;</div><div class="line">        &#125;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Writer</span> </span>&#123;</div><div class="line">    FSDataOutputStream out; <span class="comment">// FSDataOutputStream</span></div><div class="line">  	DataOutputBuffer buffer = <span class="keyword">new</span> DataOutputBuffer();  <span class="comment">// DataOutputBuffer</span></div><div class="line">  	CompressionCodec codec = <span class="keyword">null</span>; <span class="comment">// DefaultCodec</span></div><div class="line">  	CompressionOutputStream deflateFilter = <span class="keyword">null</span>; <span class="comment">// CompressorStream</span></div><div class="line">  	DataOutputStream deflateOut = <span class="keyword">null</span>; <span class="comment">// DataOutputStream</span></div><div class="line">  	Compressor compressor = <span class="keyword">null</span>; <span class="comment">// BuiltInZlibDeflater</span></div><div class="line">  	<span class="keyword">protected</span> Serializer keySerializer; <span class="comment">// JavaSerialization$JavaSerializationSerializer</span></div><div class="line">    <span class="keyword">protected</span> Serializer uncompressedValSerializer; <span class="comment">// JavaSerialization$JavaSerializationSerializer</span></div><div class="line">    <span class="keyword">protected</span> Serializer compressedValSerializer; <span class="comment">// JavaSerialization$JavaSerializationSerializer</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/29/Hadoop-ObjectWritable-class-analysis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -785,7 +944,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -807,7 +966,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -891,7 +1050,7 @@
 
 <div class="theme-info">
     <div class="powered-by"></div>
-    <span class="post-count">Total 3.4k words</span>
+    <span class="post-count">Total 3.8k words</span>
 </div>
 
         
