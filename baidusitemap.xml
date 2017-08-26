@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/08/25/hadoop-sequencefile-class-analysis/</loc>
+    <lastmod>2017-08-26T17:08:20.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hadoop SequenceFile I/O 流分析</title>
+        <pubTime>2017-08-25T12:58:04.000Z</pubTime>
+        
+        <tag>Hadoop</tag>
+         
+        <tag>Java</tag>
+         
+        <tag>I/O</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://yoursite.com/categories/java/"/>
+          
+             
+              <breadCrumb title="Hadoop" url="http://yoursite.com/categories/java/hadoop/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://yoursite.com/2017/07/29/hadoop-objectwritable-class-analysis/</loc>
+    <lastmod>2017-08-26T17:08:03.000Z</lastmod>
+    <data>
+        <display>
+        <title>Hadoop ObjectWritable 源码与相关单元测试介绍</title>
+        <pubTime>2017-07-29T05:38:52.000Z</pubTime>
+        
+        <tag>Hadoop</tag>
+         
+        <tag>Java</tag>
+         
+         
+           
+             
+              <breadCrumb title="Java" url="http://yoursite.com/categories/java/"/>
+          
+             
+              <breadCrumb title="Hadoop" url="http://yoursite.com/categories/java/hadoop/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+</urlset>
