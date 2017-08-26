@@ -454,7 +454,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/29/Hadoop-ObjectWritable-class-analysis/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/29/hadoop-objectwritable-class-analysis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Yahui Liu">
@@ -473,7 +473,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/29/Hadoop-ObjectWritable-class-analysis/" itemprop="url">Hadoop ObjectWritable 源码与相关单元测试介绍</a></h1>
+                <a class="post-title-link" href="/2017/07/29/hadoop-objectwritable-class-analysis/" itemprop="url">Hadoop ObjectWritable 源码与相关单元测试介绍</a></h1>
         
 
         <div class="post-meta">
@@ -565,7 +565,7 @@
 <img src="https://farm5.staticflickr.com/4314/35864191340_39b323b771_o.jpg" alt="Hadoop IO classes hierarchy"><br><br><br>其他的很好理解，每种java的原生的类和容器都有一个对应实现了<code>Writable</code>的类（<code>IntWritable</code>、<code>MapFile</code>等）。<code>ObjectWritable</code> 是hadoop.io模块里面一个比较特殊的类（用红色标出），它是一个通用的Writable类，可以将任意的自定义类转为byte流，原因是因为会它会把将要转换的对象的类信息记录在自己的成员变量<code>private Class declaredClass;</code>中，然后序列化时，将类的名字，以string的形式一并写入byte流中。在收到对应的byte流后，解析程序可以知道类名string的长度，然后从byte流中获得类的信息，之后就是根据类的信息去以此解析这个类的所有成员变量的值。<br><br>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/07/29/Hadoop-ObjectWritable-class-analysis/#more" rel="contents">
+            <a class="btn" href="/2017/07/29/hadoop-objectwritable-class-analysis/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
